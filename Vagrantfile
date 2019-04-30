@@ -14,7 +14,7 @@ end
 
 ensure_plugins(vconfig.fetch('vagrant_plugins')) if vconfig.fetch('vagrant_install_plugins')
 
-servers = YAML.load_file(File.join(File.dirname(__FILE__), 'vagrant.servers.yml'))
+vms = YAML.load_file(File.join(File.dirname(__FILE__), 'vagrant.vms.yml'))
 
 Vagrant.require_version '>= 2.1.0'
 
@@ -36,12 +36,12 @@ Vagrant.configure('2') do |config|
     end
   end
 
-  servers.each do |server_config|
-    trellis_config = Trellis::Config.new(root_path: ANSIBLE_PATH, server: server_config.fetch('name'))
+  vms.each do |vm_config|
+    trellis_config = Trellis::Config.new(root_path: ANSIBLE_PATH, server: vm_config.fetch('name'))
     
-    config.vm.define server_config.fetch('name') do |srv|
+    config.vm.define vm_config.fetch('name') do |srv|
 
-      vconfig.merge!(server_config) if server_config
+      vconfig.merge!(vm_config) if vm_config
 
       srv.vm.box = vconfig.fetch('vagrant_box')
       srv.vm.box_version = vconfig.fetch('vagrant_box_version')
