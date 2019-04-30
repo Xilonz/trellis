@@ -1,0 +1,7 @@
+# Make sure these match with the hosts in hosts/development!
+---
+- name: development_vm1
+  vagrant_memory: 1024
+
+- name: development_vm2
+  vagrant_memory: 1024

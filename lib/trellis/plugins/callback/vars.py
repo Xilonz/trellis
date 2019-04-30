@@ -12,7 +12,6 @@ from ansible.playbook.play_context import PlayContext
 from ansible.playbook.task import Task
 from ansible.plugins.callback import CallbackBase
 from ansible.template import Templar
-from ansible.utils.unsafe_proxy import wrap_var
 
 
 class CallbackModule(CallbackBase):
@@ -36,7 +35,7 @@ class CallbackModule(CallbackBase):
         # wrap values if they match raw_vars pattern
         elif isinstance(item, AnsibleUnicode):
             match = next((pattern for pattern in patterns if re.match(pattern, key_string)), None)
-            return wrap_var(item) if match else item
+            return AnsibleUnicode(''.join(['{% raw %}', item, '{% endraw %}'])) if not item.startswith(('{% raw', '{%raw')) and match else item
 
         else:
             return item

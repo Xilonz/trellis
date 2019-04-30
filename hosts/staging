@@ -1,8 +1,13 @@
 # Add each host to the [staging] group and to a "type" group such as [web] or [db].
 # List each machine only once per [group], even if it will host multiple sites.
 
+staging_server1 ansible_ssh_host=example.com
+staging_server2 ansible_ssh_host=example.com
+
 [staging]
-your_server_hostname
+staging_server1
+staging_server2
 
 [web]
-your_server_hostname
+staging_server1
+staging_server2

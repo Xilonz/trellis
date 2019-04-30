@@ -5,8 +5,9 @@ require 'yaml'
 
 module Trellis
   class Config
-    def initialize(root_path:)
+    def initialize(root_path:, server:)
       @root_path = root_path
+      @server = server
     end
 
     def multisite_subdomains?
@@ -62,7 +63,12 @@ module Trellis
     end
 
     def path
-      File.join(@root_path, 'group_vars', 'development', 'wordpress_sites.yml')
+      path = File.join(@root_path, 'host_vars', @server || '', 'wordpress_sites.yml')
+      if File.exist?(path)
+        path
+      else 
+        File.join(@root_path, 'group_vars', 'development', 'wordpress_sites.yml')
+      end
     end
 
     def template_content
